@@ -7,11 +7,11 @@ from vuer_sim import PhysicsMaterial
 
 rubber = PhysicsMaterial(
     "rubber",
-    friction=(0.9, 0.005, 0.0001),  # slide, torsion, roll
+    friction=(0.9, 0.005, 0.0001),   # slide, torsion, roll
     restitution=0.7,
-    density=1200,  # kg/m^3
+    density=1200,                    # kg/m^3
 )
-rubber.solref  # (0.02, 0.1128...): restitution sets the damping ratio
+rubber.solref        # (0.02, 0.1128...): restitution sets the damping ratio
 ```
 
 ## Fields
@@ -46,8 +46,7 @@ rubber.to_mjcf()
 #  'condim': '3', 'priority': '0', 'margin': '0', 'density': '1200'}
 
 import xml.etree.ElementTree as ET
-
-ET.tostring(rubber.to_mjcf_default())  # <default class="rubber"><geom .../></default>
+ET.tostring(rubber.to_mjcf_default())   # <default class="rubber"><geom .../></default>
 ```
 
 `from_mjcf` reads a `<geom>` element, a `<default class>` element, an attribute
@@ -63,8 +62,7 @@ inheritance from the parent class, as MuJoCo does:
 
 ```python
 from vuer_sim import mjcf_defaults
-
-classes = mjcf_defaults(ET.parse("scene.xml").getroot())  # {"main": ..., "soft": ...}
+classes = mjcf_defaults(ET.parse("scene.xml").getroot())   # {"main": ..., "soft": ...}
 ```
 
 `PhysicsMaterial.from_model(model, geom)` reads a compiled `mujoco.MjModel`.
@@ -80,10 +78,10 @@ from pxr import Usd, UsdGeom
 from vuer_sim.usd import bind
 
 stage = Usd.Stage.CreateNew("scene.usda")
-material = rubber.to_usd(stage, "/Materials/rubber")  # UsdShade.Material + UsdPhysics.MaterialAPI
-bind(UsdGeom.Cube.Define(stage, "/World/ball").GetPrim(), material)  # purpose "physics"
+material = rubber.to_usd(stage, "/Materials/rubber")      # UsdShade.Material + UsdPhysics.MaterialAPI
+bind(UsdGeom.Cube.Define(stage, "/World/ball").GetPrim(), material)   # purpose "physics"
 
-PhysicsMaterial.from_usd(stage.GetPrimAtPath("/World/ball"))  # reads the bound physics material
+PhysicsMaterial.from_usd(stage.GetPrimAtPath("/World/ball"))   # reads the bound physics material
 ```
 
 | PhysicsMaterial | USD attribute |

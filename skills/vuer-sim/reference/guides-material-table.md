@@ -11,7 +11,7 @@ table.add(PhysicsMaterial("stone", friction=0.6, restitution=0.3, density=2400))
 table.add(PhysicsMaterial("ceramic", restitution=0.5, density=2400))
 table.add(SensorMaterial("glass", lidar_reflectivity=0.08, transparent=True))
 
-table.save("bundle")  # bundle/materials.json
+table.save("bundle")                  # bundle/materials.json
 table = MaterialTable.load("bundle")  # or a path to a .json file
 ```
 
@@ -75,9 +75,9 @@ A key of `assign` selects geoms. The most specific key wins:
    length go in key order.
 
 ```python
-table.resolve("cup_12")  # "ceramic"
+table.resolve("cup_12")                      # "ceramic"
 table.resolve("lamp_shade", "window_glass")  # "glass"
-table.assignments(model)  # {geom id: material name}
+table.assignments(model)                     # {geom id: material name}
 ```
 
 ## Apply to a model
@@ -86,10 +86,10 @@ table.assignments(model)  # {geom id: material name}
 import mujoco
 
 spec = mujoco.MjSpec.from_file("bundle/scene.xml")
-report = table.apply(spec)  # sets friction, solref, solimp, condim, priority, margin, density
+report = table.apply(spec)      # sets friction, solref, solimp, condim, priority, margin, density
 model = spec.compile()
-report.assigned  # {"floor": "stone", "cup_1": "ceramic", ...}
-report.warnings  # e.g. a restitution that the timestep cannot hold
+report.assigned                 # {"floor": "stone", "cup_1": "ceramic", ...}
+report.warnings                 # e.g. a restitution that the timestep cannot hold
 ```
 
 `apply` also takes a compiled `MjModel`. Then the changes take effect at the

@@ -31,7 +31,7 @@ from vuer_sim.scene import scene_summary
 from vuer_sim.viewer import attach
 
 app = Vuer()
-attach(app, "path/to/bundle", scene=scene_summary(model))  # registers the load and save handlers
+attach(app, "path/to/bundle", scene=scene_summary(model))   # registers the load and save handlers
 app.run()
 ```
 

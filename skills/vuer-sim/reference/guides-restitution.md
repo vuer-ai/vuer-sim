@@ -36,9 +36,9 @@ on a direct-form material keeps the stiffness and sets the damping.
 ```python
 from vuer_sim import restitution_to_dampratio, dampratio_to_restitution, solref_restitution
 
-restitution_to_dampratio(0.5)  # 0.2154
-dampratio_to_restitution(0.2154)  # 0.5
-solref_restitution((-10000, -100))  # 0.163 (z = 0.5)
+restitution_to_dampratio(0.5)            # 0.2154
+dampratio_to_restitution(0.2154)         # 0.5
+solref_restitution((-10000, -100))       # 0.163 (z = 0.5)
 ```
 
 ## Limits

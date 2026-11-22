@@ -37,8 +37,8 @@ for material in spec.materials:
     table.add(guess.material)
     table.assign[f"material:{material.name}"] = material.name
 
-table.save("examples/lab_table")  # writes examples/lab_table/materials.json
-report = table.apply(spec)  # sets friction, solref, solimp, density, ...
+table.save("examples/lab_table")   # writes examples/lab_table/materials.json
+report = table.apply(spec)          # sets friction, solref, solimp, density, ...
 model = spec.compile()
 ```
 

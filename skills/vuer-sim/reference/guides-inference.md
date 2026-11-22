@@ -8,14 +8,14 @@ PBR parameters.
 from vuer_sim import infer_physics
 
 got = infer_physics("Oakwood_02")
-got.category  # "wood"
-got.confidence  # 0.48 = 0.6 (category) x 0.8 ("wood" is part of a word)
-got.material  # PhysicsMaterial(name="wood", friction=(0.4, ...), restitution=0.5, density=700, ...)
-got.ranges  # {"friction": (0.25, 0.5), "density": (500, 900), "restitution": (0.4, 0.6)}
-got.sensor  # SensorMaterial(lidar_reflectivity=0.5, ...)
-got.sources  # URLs of the sources
+got.category      # "wood"
+got.confidence    # 0.48 = 0.6 (category) x 0.8 ("wood" is part of a word)
+got.material      # PhysicsMaterial(name="wood", friction=(0.4, ...), restitution=0.5, density=700, ...)
+got.ranges        # {"friction": (0.25, 0.5), "density": (500, 900), "restitution": (0.4, 0.6)}
+got.sensor        # SensorMaterial(lidar_reflectivity=0.5, ...)
+got.sources       # URLs of the sources
 
-infer_physics({"name": "Material.003", "metallic": 1.0, "roughness": 0.3}).category  # "metal"
+infer_physics({"name": "Material.003", "metallic": 1.0, "roughness": 0.3}).category   # "metal"
 ```
 
 ## Rules

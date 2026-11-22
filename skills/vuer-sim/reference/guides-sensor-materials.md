@@ -31,14 +31,14 @@ import numpy as np
 from vuer_sim import MaterialTable, lidar_returns
 
 table = MaterialTable.load("bundle")
-arrays = table.sensor_arrays(model)  # once per model: per-geom-id arrays
+arrays = table.sensor_arrays(model)            # once per model: per-geom-id arrays
 rng = np.random.default_rng(0)
 
 # geom (N,) int32 and dist (N,) float64, from mj_multiRay
 out = lidar_returns(geom, dist, arrays, rng)
-out.ranges  # (N,) float64, 0 where there is no return
-out.valid  # (N,) bool
-out.intensity  # (N,) float32, 0 where there is no return
+out.ranges      # (N,) float64, 0 where there is no return
+out.valid       # (N,) bool
+out.intensity   # (N,) float32, 0 where there is no return
 points = directions * out.ranges[:, None]
 ```
 
