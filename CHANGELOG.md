@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.0.1 — 2026-11-22
+
+First release.
 
 - `PhysicsMaterial` with MJCF (geom attributes, `<default>` classes, compiled models) and
   USD (`UsdPhysics.MaterialAPI`) converters. Restitution maps to the `solref` damping ratio.
