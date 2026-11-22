@@ -1,0 +1,81 @@
+# Visual to physics
+
+A scene from a 3D artist has visual materials (`OakWood_02`, `Brushed Steel`)
+but no physics materials. `infer_physics` guesses one from the name or from the
+PBR parameters.
+
+```python
+from vuer_sim import infer_physics
+
+got = infer_physics("Oakwood_02")
+got.category  # "wood"
+got.confidence  # 0.48 = 0.6 (category) x 0.8 ("wood" is part of a word)
+got.material  # PhysicsMaterial(name="wood", friction=(0.4, ...), restitution=0.5, density=700, ...)
+got.ranges  # {"friction": (0.25, 0.5), "density": (500, 900), "restitution": (0.4, 0.6)}
+got.sensor  # SensorMaterial(lidar_reflectivity=0.5, ...)
+got.sources  # URLs of the sources
+
+infer_physics({"name": "Material.003", "metallic": 1.0, "roughness": 0.3}).category  # "metal"
+```
+
+## Rules
+
+1. The name is split into lower-case words (`OakWood_02.001` gives `oak`,
+   `wood`, `02`, `001`). A word that is a keyword of a category gives that
+   category, with match quality 1.0. The categories are tried in the order of
+   the table below.
+2. Else, a keyword of 4 or more letters inside the joined words gives the
+   category, with match quality 0.8. The longest keyword wins.
+3. Else, the PBR parameters decide, with match quality 0.6: `metallic ≥ 0.5`
+   gives `metal`; `transmission ≥ 0.5` or opacity below 0.5 (also the alpha of
+   `base_color`) gives `glass`.
+4. Else, the result is `unknown`: the MuJoCo defaults, with confidence 0.
+
+The name wins over the PBR rules. `confidence` is the confidence of the category
+times the match quality.
+
+A dark `base_color` lowers the LiDAR reflectivity of the sensor guess:
+`reflectivity = min(category value, 0.05 + 0.85 × luminance)`. This is an
+assumption (a dark visible albedo is usually dark at 905 nm too), not a
+measurement.
+
+## The lookup table
+
+The values are typical for a dry contact of the material on a hard surface. Use
+them as a start for a scene, not as measurements of your objects.
+`tests/test_infer.py` checks that this table matches `vuer_sim.lookup_table()`.
+
+| Category | Keywords (examples) | Friction (range) | Density kg/m³ (range) | Restitution (range) | Confidence | LiDAR reflectivity | Note |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| wood | wood, wooden, oak, pine, maple | 0.4 (0.25–0.5) | 700 (500–900) | 0.5 (0.4–0.6) | 0.6 | 0.5 | wood on wood, clean and dry; pine 500 to oak 900 kg/m^3 |
+| metal | metal, metallic, steel, iron, chrome | 0.6 (0.5–0.8) | 7850 (7700–8900) | 0.6 (0.5–0.8) | 0.6 | 0.6 | steel on steel, dry; copper and brass reach 8900 kg/m^3 |
+| aluminum | aluminum, aluminium, alu, anodized | 0.6 (0.45–1.05) | 2700 (2640–2810) | 0.5 (0.4–0.7) | 0.6 | 0.6 | aluminium on steel 0.47-0.61, on aluminium up to 1.05 |
+| plastic | plastic, abs, pvc, polypropylene, polyethylene | 0.35 (0.2–0.5) | 1050 (900–1400) | 0.5 (0.3–0.7) | 0.4 | 0.4 | polyethylene on steel 0.2, ABS and nylon higher |
+| rubber | rubber, silicone, latex, tire, tyre | 0.9 (0.6–1.2) | 1200 (920–1500) | 0.7 (0.5–0.9) | 0.5 | 0.05 | rubber on dry concrete 0.6-0.85; soft rubber exceeds 1 |
+| glass | glass, window, glazing, crystal, pyrex | 0.5 (0.4–1) | 2500 (2400–2800) | 0.6 (0.5–0.7) | 0.5 | 0.08 (transparent) | clean glass on glass is 0.9-1.0, any film lowers it; glass on metal 0.5-0.7 |
+| fabric | fabric, cloth, textile, cotton, linen | 0.5 (0.3–0.7) | 300 (100–600) | 0.1 (0–0.2) | 0.3 | 0.4 | bulk density of folded or padded cloth; the fibre is ~1500 |
+| ceramic | ceramic, porcelain, tile, clay, terracotta | 0.5 (0.4–0.7) | 2400 (2000–2500) | 0.5 (0.3–0.6) | 0.5 | 0.7 |  |
+| stone | stone, concrete, granite, marble, cement | 0.6 (0.5–0.8) | 2400 (1800–2800) | 0.3 (0.2–0.5) | 0.5 | 0.3 | concrete 2300-2400, granite and marble 2600-2800, brick 1800 |
+| paper | paper, cardboard, carton, paperboard, book | 0.4 (0.3–0.5) | 700 (100–1150) | 0.2 (0.1–0.4) | 0.3 | 0.8 | sheet paper 700-1150; an empty cardboard box is far lighter |
+| foam | foam, sponge, styrofoam, polystyrene, eva | 0.7 (0.5–1) | 50 (20–100) | 0.2 (0.1–0.4) | 0.3 | 0.6 |  |
+| leather | leather, suede | 0.6 (0.4–0.7) | 860 (800–950) | 0.3 (0.2–0.4) | 0.4 | 0.2 | leather on wood about 0.6 |
+
+The full keyword lists are in `vuer_sim/infer.py` (`CATEGORIES`).
+
+## Sources
+
+- Friction: Engineering ToolBox, [Friction and Friction Coefficients for some Common Materials](https://www.engineeringtoolbox.com/friction-coefficients-d_778.html), and Wikipedia, [Friction: approximate coefficients](https://en.wikipedia.org/wiki/Friction#Approximate_coefficients_of_friction).
+- Density: Engineering ToolBox, [Densities of Solids](https://www.engineeringtoolbox.com/density-solids-d_1265.html).
+- Restitution: Wikipedia, [Coefficient of restitution](https://en.wikipedia.org/wiki/Coefficient_of_restitution), and R. Cross, "The bounce of a ball", *Am. J. Phys.* 67, 222 (1999). Restitution changes with the impact speed and with the other body, so the confidence of every category stays at or below 0.6.
+- LiDAR reflectivity and `transparent` are assumptions of vuer-sim, not values from these sources. Measure them for your sensor when they matter (see [Sensor materials](reference/guides-sensor-materials.md)).
+
+## Confidence
+
+| Value | Meaning |
+| --- | --- |
+| 0.5–0.6 | A whole-word name match in a category with narrow ranges (wood, metal, aluminum). |
+| 0.3–0.5 | A part-of-word match, a PBR guess, or a category with wide ranges (plastic, fabric, paper, foam). |
+| 0 | No match: the MuJoCo defaults. Set this material by hand. |
+
+Show the confidence to the person who edits the table. The editor colours geoms
+by any property, so a low-confidence guess is easy to find and fix.

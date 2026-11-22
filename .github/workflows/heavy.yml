@@ -1,0 +1,25 @@
+# Heavy checks by manual dispatch only: MuJoCo smoke tests, USD round trips,
+# vuer handlers and the example script (scripts/local-checks.sh).
+name: heavy
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: heavy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  heavy:
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: "3.12"
+      - run: ./scripts/local-checks.sh

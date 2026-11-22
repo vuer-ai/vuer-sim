@@ -1,0 +1,271 @@
+{
+  "assign": {
+    "material:abs_plastic": "abs_plastic",
+    "material:black_rubber": "black_rubber",
+    "material:brushed_steel": "brushed_steel",
+    "material:concrete_floor": "concrete_floor",
+    "material:cotton_fabric": "cotton_fabric",
+    "material:oak_wood": "oak_wood",
+    "material:porcelain": "porcelain",
+    "material:window_glass": "window_glass"
+  },
+  "materials": {
+    "abs_plastic": {
+      "physics": {
+        "condim": 3,
+        "density": 1050.0,
+        "friction": [
+          0.35,
+          0.005,
+          0.0001
+        ],
+        "margin": 0.0,
+        "priority": 0,
+        "restitution": 0.5,
+        "solimp": [
+          0.9,
+          0.95,
+          0.001,
+          0.5,
+          2.0
+        ],
+        "solref": [
+          0.02,
+          0.2154537619662468
+        ]
+      },
+      "sensor": {
+        "depth_noise_std": 0.0,
+        "dropout": 0.0,
+        "intensity": null,
+        "lidar_reflectivity": 0.4,
+        "transparent": false
+      }
+    },
+    "black_rubber": {
+      "physics": {
+        "condim": 3,
+        "density": 1200.0,
+        "friction": [
+          0.9,
+          0.005,
+          0.0001
+        ],
+        "margin": 0.0,
+        "priority": 0,
+        "restitution": 0.7,
+        "solimp": [
+          0.9,
+          0.95,
+          0.001,
+          0.5,
+          2.0
+        ],
+        "solref": [
+          0.02,
+          0.11280845069358131
+        ]
+      },
+      "sensor": {
+        "depth_noise_std": 0.0,
+        "dropout": 0.0,
+        "intensity": null,
+        "lidar_reflectivity": 0.05,
+        "transparent": false
+      }
+    },
+    "brushed_steel": {
+      "physics": {
+        "condim": 3,
+        "density": 7850.0,
+        "friction": [
+          0.6,
+          0.005,
+          0.0001
+        ],
+        "margin": 0.0,
+        "priority": 0,
+        "restitution": 0.6,
+        "solimp": [
+          0.9,
+          0.95,
+          0.001,
+          0.5,
+          2.0
+        ],
+        "solref": [
+          0.02,
+          0.16049304666428385
+        ]
+      },
+      "sensor": {
+        "depth_noise_std": 0.0,
+        "dropout": 0.0,
+        "intensity": null,
+        "lidar_reflectivity": 0.6,
+        "transparent": false
+      }
+    },
+    "concrete_floor": {
+      "physics": {
+        "condim": 3,
+        "density": 2400.0,
+        "friction": [
+          0.6,
+          0.005,
+          0.0001
+        ],
+        "margin": 0.0,
+        "priority": 0,
+        "restitution": 0.3,
+        "solimp": [
+          0.9,
+          0.95,
+          0.001,
+          0.5,
+          2.0
+        ],
+        "solref": [
+          0.02,
+          0.3578571305033167
+        ]
+      },
+      "sensor": {
+        "depth_noise_std": 0.0,
+        "dropout": 0.0,
+        "intensity": null,
+        "lidar_reflectivity": 0.3,
+        "transparent": false
+      }
+    },
+    "cotton_fabric": {
+      "physics": {
+        "condim": 3,
+        "density": 300.0,
+        "friction": [
+          0.5,
+          0.005,
+          0.0001
+        ],
+        "margin": 0.0,
+        "priority": 0,
+        "restitution": 0.1,
+        "solimp": [
+          0.9,
+          0.95,
+          0.001,
+          0.5,
+          2.0
+        ],
+        "solref": [
+          0.02,
+          0.5911550337988976
+        ]
+      },
+      "sensor": {
+        "depth_noise_std": 0.0,
+        "dropout": 0.0,
+        "intensity": null,
+        "lidar_reflectivity": 0.395,
+        "transparent": false
+      }
+    },
+    "oak_wood": {
+      "physics": {
+        "condim": 3,
+        "density": 700.0,
+        "friction": [
+          0.4,
+          0.005,
+          0.0001
+        ],
+        "margin": 0.0,
+        "priority": 0,
+        "restitution": 0.5,
+        "solimp": [
+          0.9,
+          0.95,
+          0.001,
+          0.5,
+          2.0
+        ],
+        "solref": [
+          0.02,
+          0.2154537619662468
+        ]
+      },
+      "sensor": {
+        "depth_noise_std": 0.0,
+        "dropout": 0.0,
+        "intensity": null,
+        "lidar_reflectivity": 0.453,
+        "transparent": false
+      }
+    },
+    "porcelain": {
+      "physics": {
+        "condim": 3,
+        "density": 2400.0,
+        "friction": [
+          0.5,
+          0.005,
+          0.0001
+        ],
+        "margin": 0.0,
+        "priority": 0,
+        "restitution": 0.5,
+        "solimp": [
+          0.9,
+          0.95,
+          0.001,
+          0.5,
+          2.0
+        ],
+        "solref": [
+          0.02,
+          0.2154537619662468
+        ]
+      },
+      "sensor": {
+        "depth_noise_std": 0.0,
+        "dropout": 0.0,
+        "intensity": null,
+        "lidar_reflectivity": 0.7,
+        "transparent": false
+      }
+    },
+    "window_glass": {
+      "physics": {
+        "condim": 3,
+        "density": 2500.0,
+        "friction": [
+          0.5,
+          0.005,
+          0.0001
+        ],
+        "margin": 0.0,
+        "priority": 0,
+        "restitution": 0.6,
+        "solimp": [
+          0.9,
+          0.95,
+          0.001,
+          0.5,
+          2.0
+        ],
+        "solref": [
+          0.02,
+          0.16049304666428385
+        ]
+      },
+      "sensor": {
+        "depth_noise_std": 0.0,
+        "dropout": 0.0,
+        "intensity": null,
+        "lidar_reflectivity": 0.08,
+        "transparent": true
+      }
+    }
+  },
+  "schema": "vuer-sim.materials/1"
+}
