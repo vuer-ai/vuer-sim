@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vuer-sim"
+version = "0.0.0"
+description = "Simulation materials for MuJoCo and USD scenes: physics materials, visual-to-physics inference, LiDAR materials, and an editor for vuer."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Ge Yang", email = "ge@fortyfive.ai" }]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = ["numpy>=1.21"]
+
+[project.optional-dependencies]
+mujoco = ["mujoco>=3.2"]
+usd = ["usd-core>=24.5"]
+viewer = ["vuer>=0.1.6"]
+all = ["vuer-sim[mujoco,usd,viewer]"]
+
+[project.urls]
+Homepage = "https://github.com/vuer-ai/vuer-sim"
+Documentation = "https://vuer-sim.dreamlake.ai"
+Repository = "https://github.com/vuer-ai/vuer-sim"
+
+[dependency-groups]
+# Fast unit tests and static checks: what PR CI installs.
+dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.11"]
+# Heavy checks that run locally or by manual dispatch (scripts/local-checks.sh).
+heavy = ["mujoco>=3.2", "usd-core>=24.5", "vuer>=0.1.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vuer_sim"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/vuer_sim", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "mujoco: needs mujoco (heavy; local or manual dispatch)",
+    "usd: needs pxr from usd-core (heavy; local or manual dispatch)",
+    "viewer: needs vuer (heavy; local or manual dispatch)",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501", "UP037"]
+
+[tool.mypy]
+python_version = "3.10"
+files = ["src/vuer_sim"]
+ignore_missing_imports = true
+check_untyped_defs = true
