@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vuer-sim"
-version = "0.0.0"
+version = "0.0.1"
 description = "Simulation materials for MuJoCo and USD scenes: physics materials, visual-to-physics inference, LiDAR materials, and an editor for vuer."
 readme = "README.md"
 license = { text = "MIT" }
