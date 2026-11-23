@@ -1,0 +1,20 @@
+# Netlify config for the vuer-sim dockit docs site (from the dockit release kit,
+# @dreamlake/dockit/templates/netlify.example.toml, with the docs package at docs/).
+# Expected production hostname: vuer-sim.dreamlake.ai (site.config.ts `url`).
+
+[build]
+base = "docs"
+command = "pnpm install --frozen-lockfile && pnpm build"
+publish = "dist/client"
+
+[build.environment]
+# Vite 7 needs node ^20.19 || >=22.12.
+NODE_VERSION = "22"
+PNPM_VERSION = "10.33.0"
+# Corepack's baked-in registry keys rotate; the dockit kit disables the check.
+COREPACK_INTEGRITY_KEYS = "0"
+
+# PR deploy previews and branch deploys use the [build] settings.
+[context.deploy-preview]
+
+[context.branch-deploy]
