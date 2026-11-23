@@ -1,0 +1,49 @@
+---
+title: Install
+section: Get started
+order: 1
+description: Install vuer-sim and its optional extras for MuJoCo, USD and the vuer editor.
+---
+
+# Install
+
+vuer-sim needs Python 3.10 or later.
+
+```bash file="terminal"
+pip install vuer-sim                 # core: numpy only
+pip install 'vuer-sim[mujoco]'       # MaterialTable.apply, scene_summary
+pip install 'vuer-sim[usd]'          # PhysicsMaterial.from_usd / to_usd (usd-core gives pxr)
+pip install 'vuer-sim[viewer]'       # the editor's vuer events
+pip install 'vuer-sim[all]'
+```
+
+> **Note:** Version 0.0.1 is not on PyPI yet. Until it is published, install from GitHub:
+> `pip install 'vuer-sim[all] @ git+https://github.com/vuer-ai/vuer-sim'`.
+
+## What each extra adds
+
+| Extra | Dependency | Used by |
+| --- | --- | --- |
+| `mujoco` | `mujoco>=3.2` | `MaterialTable.apply`, `MaterialTable.assignments`, `MaterialTable.sensor_arrays`, `PhysicsMaterial.from_model`, `vuer_sim.scene` |
+| `usd` | `usd-core>=24.5` | `vuer_sim.usd`, `PhysicsMaterial.from_usd`, `PhysicsMaterial.to_usd` |
+| `viewer` | `vuer>=0.1.6` | `vuer_sim.viewer.attach`, `vuer_sim.viewer.serve` |
+
+The MJCF converters, `infer_physics`, `lidar_returns` and the JSON table do not
+need any extra.
+
+## The TypeScript package
+
+```bash file="terminal"
+pnpm add @vuer-ai/vuer-sim @vuer-ai/vuer @dreamlake/uikit
+```
+
+`@vuer-ai/vuer-sim` is not on npm yet. See [Editor](/editor/overview).
+
+## Development
+
+```bash file="terminal"
+git clone https://github.com/vuer-ai/vuer-sim && cd vuer-sim
+uv sync --group dev --group heavy
+make check                 # lint, typecheck, fast unit tests (what PR CI runs)
+./scripts/local-checks.sh  # also MuJoCo, USD and vuer tests and the example
+```

@@ -1,0 +1,59 @@
+# Development and releases
+
+## Pull requests
+
+Every change after the first commit goes through a pull request. Branch from
+`main` with a topic name (`feat/...`, `fix/...`, `docs/...`).
+
+## CI
+
+PR CI is cheap on purpose. It runs only:
+
+- `make lint` (ruff check and ruff format),
+- `make typecheck` (mypy),
+- `make test` (the unit tests without the `mujoco`, `usd` and `viewer` markers).
+
+The workflow has path filters and cancels older runs of the same branch. It runs
+on `${{ vars.CI_RUNNER || 'ubuntu-latest' }}`.
+
+The heavy checks do not run on PRs:
+
+| Check | Where |
+| --- | --- |
+| MuJoCo smoke tests (`tests/test_mujoco.py`) | `./scripts/local-checks.sh`, or the `heavy` workflow by manual dispatch |
+| USD round trips (`tests/test_usd.py`, needs `pxr`) | same |
+| vuer handlers (`tests/test_viewer.py::test_attach_with_vuer_events`) | same |
+| The example script | same |
+| The editor screenshot | `scripts/screenshot.py` in vuer-ai/vuer-sim-ts |
+
+The PR template has a checkbox for each of these. Tick it when the change
+touches the code that they test.
+
+## Docs and the agent skill
+
+The docs are a [dockit](https://dockit.dreamlake.ai) site in `docs/`. Pages are
+`docs/pages/<slug>/+Page.mdx`.
+
+```bash file="terminal"
+cd docs
+pnpm install
+pnpm dev         # http://localhost:3027
+pnpm gen:llms    # regenerate llms.txt, the .md twins and skills/vuer-sim/
+pnpm check:llms  # exit 1 if the committed skill is out of date
+```
+
+`skills/vuer-sim/` at the repo root is generated from the pages. Do not edit it
+by hand. Run `pnpm gen:llms` and commit it with the page change.
+
+## Releases
+
+The release follows vuer:
+
+1. Open a PR that sets `version` in `pyproject.toml` and adds the
+   `CHANGELOG.md` entry. Title: `Release vX.Y.Z`.
+2. After the merge, on `main`: `make release` tags `vX.Y.Z` and `latest`, builds
+   with `uv build`, and publishes with `uv publish` (needs `UV_PYPI_TOKEN`).
+   `make build` builds without publishing.
+
+The TypeScript package follows vuer-ts: one commit `Release vX.Y.Z - <summary>`
+that bumps `package.json`, a tag `vX.Y.Z`, then `pnpm publish`.

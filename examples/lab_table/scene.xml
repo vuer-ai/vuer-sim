@@ -1,0 +1,48 @@
+<mujoco model="lab_table">
+  <!-- Sample scene for the vuer-sim examples and tests: a table with objects of
+       different materials, a glass panel and a black rubber mat. -->
+  <option timestep="0.002"/>
+  <asset>
+    <material name="concrete_floor" rgba="0.62 0.62 0.6 1"/>
+    <material name="oak_wood" rgba="0.62 0.45 0.28 1"/>
+    <material name="porcelain" rgba="0.95 0.95 0.93 1"/>
+    <material name="window_glass" rgba="0.75 0.85 0.95 0.3"/>
+    <material name="black_rubber" rgba="0.04 0.04 0.04 1"/>
+    <material name="brushed_steel" rgba="0.7 0.72 0.75 1"/>
+    <material name="abs_plastic" rgba="0.2 0.45 0.85 1"/>
+    <material name="cotton_fabric" rgba="0.8 0.3 0.3 1"/>
+  </asset>
+  <worldbody>
+    <light pos="0 -1 3" dir="0 0.3 -1"/>
+    <geom name="floor" type="plane" size="3 3 0.1" material="concrete_floor"/>
+    <body name="table" pos="0 0 0">
+      <geom name="table_top" type="box" size="0.6 0.4 0.02" pos="0 0 0.74" material="oak_wood"/>
+      <geom name="table_leg_0" type="box" size="0.025 0.025 0.36" pos="0.55 0.35 0.36" material="oak_wood"/>
+      <geom name="table_leg_1" type="box" size="0.025 0.025 0.36" pos="-0.55 0.35 0.36" material="oak_wood"/>
+      <geom name="table_leg_2" type="box" size="0.025 0.025 0.36" pos="0.55 -0.35 0.36" material="oak_wood"/>
+      <geom name="table_leg_3" type="box" size="0.025 0.025 0.36" pos="-0.55 -0.35 0.36" material="oak_wood"/>
+      <geom name="mat" type="box" size="0.2 0.15 0.003" pos="-0.25 0 0.763" material="black_rubber"/>
+    </body>
+    <geom name="window" type="box" size="0.8 0.005 0.6" pos="0 0.9 1.0" material="window_glass"/>
+    <body name="mug" pos="0.2 0.1 0.81">
+      <freejoint/>
+      <geom name="mug_body" type="cylinder" size="0.04 0.05" material="porcelain"/>
+    </body>
+    <body name="can" pos="0.35 -0.15 0.82">
+      <freejoint/>
+      <geom name="can_body" type="cylinder" size="0.033 0.06" material="brushed_steel"/>
+    </body>
+    <body name="ball" pos="-0.25 0 1.1">
+      <freejoint/>
+      <geom name="ball" type="sphere" size="0.035" material="black_rubber"/>
+    </body>
+    <body name="block" pos="0.0 -0.2 0.8">
+      <freejoint/>
+      <geom name="block" type="box" size="0.03 0.03 0.03" material="abs_plastic"/>
+    </body>
+    <body name="cloth" pos="-0.4 0.25 0.77">
+      <freejoint/>
+      <geom name="cloth" type="box" size="0.1 0.08 0.006" material="cotton_fabric"/>
+    </body>
+  </worldbody>
+</mujoco>
