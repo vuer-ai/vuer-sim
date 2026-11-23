@@ -40,5 +40,5 @@ initDocs({
   pageMetadata,
   pageLoaders,
   rawPages,
-  sectionOrder: ['Get started', 'Guides', 'Editor', 'Reference', 'Contributing'],
+  sectionOrder: ['Get started', 'Schema', 'Guides', 'Editor', 'Reference', 'Contributing'],
 })

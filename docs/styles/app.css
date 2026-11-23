@@ -3,3 +3,10 @@
 
 @source "../pages";
 @source "../renderer";
+
+/* Inside a DreamLake artifact frame the host chooses the theme (lib/hostTheme.ts):
+   hide dockit's own toggle (cycle and segmented variants). */
+html[data-host-theme] button[aria-label^="Theme:"],
+html[data-host-theme] [aria-label="Theme"] {
+  display: none;
+}
