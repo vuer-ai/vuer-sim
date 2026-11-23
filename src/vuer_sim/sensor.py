@@ -75,6 +75,19 @@ class SensorMaterial:
             return self.intensity
         return float(round(150.0 * self.lidar_reflectivity))
 
+    def to_usd(self, stage: Any, path: str) -> Any:
+        """Write the ``vuersim:`` sensor attributes on the material prim at ``path``. Needs ``pxr``."""
+        from .usd import write_sensor_material
+
+        return write_sensor_material(self, stage, path)
+
+    @classmethod
+    def from_usd(cls, prim: Any, name: str | None = None) -> "SensorMaterial | None":
+        """Read the ``vuersim:`` sensor attributes of a material prim or of its bound material."""
+        from .usd import read_sensor_material
+
+        return read_sensor_material(prim, name=name)
+
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)
         d.pop("name")

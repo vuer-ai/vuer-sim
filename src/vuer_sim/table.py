@@ -173,8 +173,8 @@ class MaterialTable:
 
         On an ``MjSpec`` every field is set (recompile afterwards). On an
         ``MjModel`` the density cannot change (it is baked into the inertia), so
-        it is skipped with a warning; friction, solref, solimp, condim, priority
-        and margin take effect at the next step.
+        it is skipped with a warning; friction, solref, solimp, condim, priority,
+        margin and gap take effect at the next step.
         """
         report = ApplyReport()
         if hasattr(model, "geoms") and hasattr(model, "compile"):
@@ -204,6 +204,7 @@ class MaterialTable:
             geom.condim = mat.condim
             geom.priority = mat.priority
             geom.margin = mat.margin
+            geom.gap = mat.gap
             geom.density = mat.density
             report.assigned[geom.name or f"#{i}"] = mat.name
 
@@ -219,6 +220,7 @@ class MaterialTable:
             model.geom_condim[gid] = mat.condim
             model.geom_priority[gid] = mat.priority
             model.geom_margin[gid] = mat.margin
+            model.geom_gap[gid] = mat.gap
             density = density or mat.density != 1000.0
             report.assigned[_model_geom_names(model, gid)[0] or f"#{gid}"] = mat.name
         if density:

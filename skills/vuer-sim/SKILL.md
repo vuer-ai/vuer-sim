@@ -18,7 +18,7 @@ file that matches the question; each is a self-contained markdown page.
 
 **Guides**
 
-- `reference/guides-physics-materials.md` — Physics materials: PhysicsMaterial fields and the MJCF (geom attributes and default classes) and USD (UsdPhysics MaterialAPI) converters.
+- `reference/guides-physics-materials.md` — Physics materials: PhysicsMaterial fields and the MJCF (geom attributes and default classes) and USD (UsdPhysics and MuJoCo mjcPhysics schema, pinned at 4.0.1) converters.
 - `reference/guides-restitution.md` — Restitution in MuJoCo: How restitution maps to the solref damping ratio, the formula, the stability limit, and measured bounce values.
 - `reference/guides-inference.md` — Visual to physics: infer_physics guesses a PhysicsMaterial from a material name or PBR parameters, with a documented lookup table, cited typical values and a confidence.
 - `reference/guides-sensor-materials.md` — Sensor materials: SensorMaterial and lidar_returns — dropout, glass, black surfaces, range noise and intensity applied to per-ray geom ids from a ray-cast LiDAR.
