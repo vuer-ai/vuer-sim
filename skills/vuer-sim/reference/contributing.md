@@ -45,6 +45,14 @@ pnpm check:llms  # exit 1 if the committed skill is out of date
 `skills/vuer-sim/` at the repo root is generated from the pages. Do not edit it
 by hand. Run `pnpm gen:llms` and commit it with the page change.
 
+### Deploy
+
+The site deploys on Netlify with the dockit release kit. `netlify.toml` at the
+repo root builds `docs/` (`pnpm install --frozen-lockfile && pnpm build`) and
+publishes `docs/dist/client`. The production hostname is
+`vuer-sim.dreamlake.ai`, the `url` in `docs/site.config.ts`. PRs get deploy
+previews, and other branches get branch deploys.
+
 ## Releases
 
 The release follows vuer:
