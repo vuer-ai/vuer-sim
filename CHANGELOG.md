@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.0.1 — 2026-11-22
+
+First release.
 
 - `PhysicsMaterial` (friction, restitution, density, solref, solimp, condim, priority, margin,
   gap) with MJCF (geom attributes, `<default>` classes, compiled models) and
