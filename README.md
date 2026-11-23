@@ -4,7 +4,8 @@ Simulation materials for MuJoCo and USD scenes.
 
 - **`PhysicsMaterial`**: friction (slide, torsion, roll), restitution, density, `solref`,
   `solimp`, `condim`, `priority`, `margin`, with `from_mjcf`/`to_mjcf` (geom attributes and
-  `<default>` classes) and `from_usd`/`to_usd` (`UsdPhysics.MaterialAPI`).
+  `<default>` classes) and `from_usd`/`to_usd` (UsdPhysics plus MuJoCo's `mjcPhysics`
+  schema names, pinned at MuJoCo 4.0.1).
 - **Restitution in MuJoCo** through the `solref` damping ratio:
   `z = -ln(e) / sqrt(π² + ln(e)²)`. The [docs](docs/pages/guides/restitution/+Page.mdx)
   give the limits and measured bounce values.

@@ -48,7 +48,7 @@ DEFAULT_SOLIMP = (0.9, 0.95, 0.001, 0.5, 2.0)
 DEFAULT_DENSITY = 1000.0
 
 #: The MJCF geom attributes that a ``PhysicsMaterial`` owns.
-MJCF_ATTRIBUTES = ("friction", "solref", "solimp", "condim", "priority", "margin", "density")
+MJCF_ATTRIBUTES = ("friction", "solref", "solimp", "condim", "priority", "margin", "gap", "density")
 
 
 def restitution_to_dampratio(e: float) -> float:
@@ -98,8 +98,8 @@ class PhysicsMaterial:
     """Contact material of a geom.
 
     ``friction`` is MuJoCo's ``(slide, torsion, roll)``. ``density`` is in kg/m^3.
-    ``solref``, ``solimp``, ``condim``, ``priority`` and ``margin`` are the MJCF geom
-    attributes of the same names.
+    ``solref``, ``solimp``, ``condim``, ``priority``, ``margin`` and ``gap`` are the
+    MJCF geom attributes of the same names.
 
     ``restitution`` and ``solref[1]`` describe the same thing. When you give
     ``restitution``, it sets ``solref[1]``; when you leave it ``None``, it is
@@ -115,6 +115,7 @@ class PhysicsMaterial:
     condim: int = 3
     priority: int = 0
     margin: float = 0.0
+    gap: float = 0.0
     extra: dict[str, Any] = field(default_factory=dict, compare=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -152,6 +153,7 @@ class PhysicsMaterial:
             raise ValueError(f"condim must be 1, 3, 4 or 6, got {self.condim}")
         self.priority = int(self.priority)
         self.margin = float(self.margin)
+        self.gap = float(self.gap)
 
     # ------------------------------------------------------------------ dict
 
@@ -193,6 +195,7 @@ class PhysicsMaterial:
             "condim": str(self.condim),
             "priority": str(self.priority),
             "margin": num(self.margin),
+            "gap": num(self.gap),
             "density": num(self.density),
         }
 
@@ -238,11 +241,11 @@ class PhysicsMaterial:
         for key in ("condim", "priority"):
             if key in attrs:
                 kw[key] = int(attrs[key])
-        for key in ("margin", "density"):
+        for key in ("margin", "gap", "density"):
             if key in attrs:
                 kw[key] = float(attrs[key])
         mat = cls(name=name or (base.name if base else "default"), **kw)
-        mat.extra = {k: v for k, v in attrs.items() if k in ("solmix", "gap")}
+        mat.extra = {k: v for k, v in attrs.items() if k == "solmix"}
         return mat
 
     @classmethod
@@ -261,24 +264,33 @@ class PhysicsMaterial:
             condim=int(model.geom_condim[gid]),
             priority=int(model.geom_priority[gid]),
             margin=float(model.geom_margin[gid]),
+            gap=float(model.geom_gap[gid]),
         )
 
     # ------------------------------------------------------------------ USD
 
-    def to_usd(self, stage: Any, path: str) -> Any:
-        """Write a ``UsdShade.Material`` with ``UsdPhysics.MaterialAPI`` at ``path``.
+    def to_usd(self, stage: Any, path: str, colliders: Any = ()) -> Any:
+        """Write the material prim at ``path`` and bind it to ``colliders``.
 
-        Needs ``pxr`` (``pip install 'vuer-sim[usd]'``). See ``vuer_sim.usd``.
+        The material prim gets ``UsdPhysics.MaterialAPI`` and ``MjcMaterialAPI``
+        (friction, restitution, density). Each collider prim (or prim path) gets
+        the binding plus ``MjcCollisionAPI`` (``solref``, ``solimp``, ``condim``,
+        ``priority``, ``margin``, ``gap``), as in MuJoCo's own USD schema. Needs
+        ``pxr`` (``pip install 'vuer-sim[usd]'``). See ``vuer_sim.usd``.
         """
-        from .usd import write_physics_material
+        from .usd import bind, write_physics_material
 
-        return write_physics_material(self, stage, path)
+        material = write_physics_material(self, stage, path)
+        for c in colliders:
+            bind(stage.GetPrimAtPath(c) if isinstance(c, str) else c, material, self)
+        return material
 
     @classmethod
     def from_usd(cls, prim: Any, name: str | None = None) -> "PhysicsMaterial | None":
-        """Read a material prim, or the physics material bound to a geometry prim.
+        """Read a collider prim (its ``mjc:`` attributes and bound material) or a material prim.
 
-        Returns ``None`` when there is no ``UsdPhysics.MaterialAPI``. Needs ``pxr``.
+        Returns ``None`` when there is no physics material and no ``mjc:`` collider
+        attributes. Needs ``pxr``.
         """
         from .usd import read_physics_material
 

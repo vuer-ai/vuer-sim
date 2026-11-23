@@ -6,16 +6,16 @@ All names below are importable from `vuer_sim` unless a module is given.
 
 | Name | Description |
 | --- | --- |
-| `PhysicsMaterial(name, friction, restitution, density, solref, solimp, condim, priority, margin)` | Contact material of a geom. See [Physics materials](reference/guides-physics-materials.md). |
+| `PhysicsMaterial(name, friction, restitution, density, solref, solimp, condim, priority, margin, gap)` | Contact material of a geom. See [Physics materials](reference/guides-physics-materials.md). |
 | `PhysicsMaterial.to_mjcf() -> dict[str, str]` | MJCF geom attributes. |
 | `PhysicsMaterial.to_mjcf_default(class_name=None) -> Element` | `<default class><geom/></default>`. |
 | `PhysicsMaterial.from_mjcf(source, name=None, base=None)` | Read a `<geom>`, a `<default>`, a mapping or XML text. |
 | `PhysicsMaterial.from_model(model, geom, name=None)` | Read a geom of a compiled `MjModel` (density not kept). |
-| `PhysicsMaterial.to_usd(stage, path)` / `from_usd(prim, name=None)` | USD converters (needs `pxr`). `from_usd` returns `None` without a physics material. |
+| `PhysicsMaterial.to_usd(stage, path, colliders=())` / `from_usd(prim, name=None)` | USD converters with the `mjcPhysics` names of MuJoCo 4.0.1 (needs `pxr`). `from_usd` reads a collider or a material prim; `None` when there is nothing to read. |
 | `PhysicsMaterial.to_dict()` / `from_dict(d, name=None)` | The stored JSON form. |
 | `PhysicsMaterial.max_stable_timestep() -> float` | `timeconst · min(0.5, dampratio)`. |
 | `mjcf_defaults(root) -> dict[str, PhysicsMaterial]` | Resolve all `<default>` classes with inheritance. |
-| `SensorMaterial(name, lidar_reflectivity, intensity, dropout, transparent, depth_noise_std)` | How a surface looks to sensors. `reported_intensity` gives the intensity. |
+| `SensorMaterial(name, lidar_reflectivity, intensity, dropout, transparent, depth_noise_std)` | How a surface looks to sensors. `reported_intensity` gives the intensity. `to_usd` / `from_usd` use `vuersim:` attributes. |
 
 ## Restitution
 
@@ -60,6 +60,6 @@ All names below are importable from `vuer_sim` unless a module is given.
 
 | Module | Description |
 | --- | --- |
-| `vuer_sim.usd` | `write_physics_material`, `read_physics_material`, `bind`. |
+| `vuer_sim.usd` | `MJC_SCHEMA_VERSION` (`"4.0.1"`), `write_physics_material`, `write_collider`, `bind(prim, material, physics=None)`, `read_physics_material`, `write_sensor_material`, `read_sensor_material`, `authored_api_schemas`. |
 | `vuer_sim.scene` | `scene_summary(model, data=None, groups=None)`: geoms as JSON for the editor. |
 | `vuer_sim.viewer` | `EVENTS`, `MaterialsEndpoint`, `attach(app, bundle, scene=None)`, `serve(bundle, scene=None, port=8012)`. See [Editor](reference/editor-overview.md). |
